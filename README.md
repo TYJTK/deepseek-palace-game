@@ -20,8 +20,19 @@
 2. 登录 n8n 工作台
 3. 导入工作流文件
 4. 配置 DeepSeek API 凭据
-5. 创建数据表 `palace_game_sessions`
-6. 激活工作流即可游玩
+   在Credentials中创建Header Auth以及DeepSeek
+6. 创建数据表 `palace_game_sessions`
+   add column：sessionId         string
+               playerName        string
+               choiceHistory     string
+               storyProgress     number
+               gameEnded         boolean
+               currentAge	       string
+               timePeriod	       string
+               gender            string
+               background        string
+               npcPersonalities  string
+7. 激活工作流即可游玩
 
 ## 项目结构
 deepseek-palace-game/
