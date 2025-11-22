@@ -1,0 +1,900 @@
+{
+  "name": "PalaceGame",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "宫斗游戏 - 选择你的命运",
+        "formDescription": "欢迎来到宫廷世界，你的每一个选择都将决定你的命运。你的性别和出身背景将影响你的故事走向。",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "玩家昵称",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "角色性别",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "男"
+                  },
+                  {
+                    "option": "女"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "出身背景",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "帝王之家"
+                  },
+                  {
+                    "option": "书香世家"
+                  },
+                  {
+                    "option": "官员之家"
+                  },
+                  {
+                    "option": "寒门"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "开始游戏"
+        }
+      },
+      "id": "0f3d2e59-d6a5-4520-b0c3-3d73f5000224",
+      "name": "Game Start",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -816,
+        80
+      ],
+      "webhookId": "e2808524-816e-4593-b10b-2e5df186b9ec"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "sessionId",
+              "value": "={{ $now.toUnixInteger() }}-{{ $json['玩家昵称'] }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "playerName",
+              "value": "={{ $json['玩家昵称'] }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "choiceHistory",
+              "value": "[]",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "storyProgress",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "id-5",
+              "name": "gameEnded",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "id-6",
+              "name": "currentAge",
+              "value": "婴儿",
+              "type": "string"
+            },
+            {
+              "id": "id-7",
+              "name": "timePeriod",
+              "value": "出生",
+              "type": "string"
+            },
+            {
+              "id": "id-8",
+              "name": "gender",
+              "value": "={{ $json['角色性别'] }}",
+              "type": "string"
+            },
+            {
+              "id": "id-9",
+              "name": "background",
+              "value": "={{ $json['出身背景'] }}",
+              "type": "string"
+            },
+            {
+              "id": "id-10",
+              "name": "npcPersonalities",
+              "value": "{}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "1b9b076a-bf26-46c6-896e-d15152ae2e8e",
+      "name": "Initialize Game State",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -592,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "AKf25SheQQH4ASxQ",
+          "mode": "list",
+          "cachedResultName": "palace_game_sessions",
+          "cachedResultUrl": "/projects/znm1hvFsbhET4byn/datatables/AKf25SheQQH4ASxQ"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "sessionId": "={{ $json.sessionId }}",
+            "playerName": "={{ $json.playerName }}",
+            "choiceHistory": "={{ $json.choiceHistory }}",
+            "storyProgress": "={{ $json.storyProgress }}",
+            "gameEnded": "={{ $json.gameEnded }}",
+            "currentAge": "={{ $json.currentAge }}",
+            "timePeriod": "={{ $json.timePeriod }}",
+            "gender": "={{ $json.gender }}",
+            "background": "={{ $json.background }}",
+            "npcPersonalities": "={{ $json.npcPersonalities }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "sessionId",
+              "displayName": "sessionId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "playerName",
+              "displayName": "playerName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "choiceHistory",
+              "displayName": "choiceHistory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "storyProgress",
+              "displayName": "storyProgress",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "gameEnded",
+              "displayName": "gameEnded",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "currentAge",
+              "displayName": "currentAge",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "timePeriod",
+              "displayName": "timePeriod",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "background",
+              "displayName": "background",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "npcPersonalities",
+              "displayName": "npcPersonalities",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "f77fc7db-02e0-4a7b-a578-82e54668d011",
+      "name": "Save Game State",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AKf25SheQQH4ASxQ",
+          "mode": "list",
+          "cachedResultName": "palace_game_sessions",
+          "cachedResultUrl": "/projects/znm1hvFsbhET4byn/datatables/AKf25SheQQH4ASxQ"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "sessionId",
+              "keyValue": "={{ $json.sessionId }}"
+            }
+          ]
+        },
+        "limit": 1
+      },
+      "id": "98a1b864-c10d-4fec-b4f0-454839df3b17",
+      "name": "Load Game State",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare story context for DeepSeek API\nconst gameState = $input.first().json;\n\n// Parse choiceHistory if it's a string\nlet choiceHistory = gameState.choiceHistory || [];\nif (typeof choiceHistory === 'string') {\n  try {\n    choiceHistory = JSON.parse(choiceHistory);\n  } catch (error) {\n    choiceHistory = [];\n  }\n}\n\n// Parse npcPersonalities if it's a string\nlet npcPersonalities = gameState.npcPersonalities || [];\nif (typeof npcPersonalities === 'string') {\n  try {\n    npcPersonalities = JSON.parse(npcPersonalities);\n  } catch (error) {\n    npcPersonalities = [];\n  }\n}\n\n// Pass through all game state fields from input\nconst context = {\n  sessionId: gameState.sessionId,\n  playerName: gameState.playerName,\n  gender: gameState.gender,\n  background: gameState.background,\n  choiceHistory: choiceHistory,\n  npcPersonalities: npcPersonalities,\n  storyProgress: gameState.storyProgress || 0,\n  currentAge: gameState.currentAge || '婴儿',\n  timePeriod: gameState.timePeriod || '出生',\n  gameEnded: gameState.gameEnded || false\n};\n\nreturn [{ json: context }];"
+      },
+      "id": "9efc0776-fc68-4c0d-b5f2-fc5d1f919944",
+      "name": "Prepare Story Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build a detailed prompt for DeepSeek API to generate palace intrigue story\nconst gameState = $input.first().json;\n\n// Extract game state information\nconst playerName = gameState.playerName || '玩家';\nconst gender = gameState.gender || '女';\nconst background = gameState.background || '帝王之家';\nconst choiceHistory = gameState.choiceHistory || [];\nconst storyProgress = gameState.storyProgress || 0;\nconst currentAge = gameState.currentAge || '婴儿';\nconst timePeriod = gameState.timePeriod || '出生';\nconst sessionId = gameState.sessionId;\nconst gameEnded = gameState.gameEnded || false;\n\n// Parse npcPersonalities if it's a string\nlet npcPersonalities = gameState.npcPersonalities || {};\nif (typeof npcPersonalities === 'string') {\n  try {\n    npcPersonalities = JSON.parse(npcPersonalities);\n  } catch (error) {\n    npcPersonalities = {};\n  }\n}\n\n// Build context from previous choices\nlet previousChoicesContext = '';\nif (choiceHistory.length > 0) {\n  previousChoicesContext = '\\n\\n之前的故事发展：\\n' + choiceHistory.map((choice, index) => {\n    return `第${index + 1}回合：\\n情境：${choice.situation}\\n选择：${choice.chosen}\\n时间：${choice.timestamp}`;\n  }).join('\\n\\n');\n} else {\n  previousChoicesContext = '\\n\\n这是故事的开始。';\n}\n\n// Female-specific story paths\nconst genderPaths = `\n女性角色特定故事路线：\n- 毒杀皇帝成为女帝：通过极端手段夺取最高权力\n- 宫斗后坐上皇后之位：通过宫廷斗争成为皇后\n- 与亲王私奔：为爱情放弃一切，逃离宫廷\n- 成为权倾朝野的太后：通过儿子掌控朝政\n- 联姻和亲：成为政治联姻的工具，在异国他乡谋求生存\n- 出家为尼：逃离宫廷纷争，寻求心灵平静`;\n\n// Build background-specific story elements\nconst backgroundElements = {\n  '帝王之家': '作为皇室成员，你天生卷入皇位继承的斗争中，兄弟姐妹之间的明争暗斗将伴随你的一生。',\n  '书香世家': '出身书香门第，你可以通过科举考试进入官场，用智慧和才学在朝堂上立足。',\n  '官员之家': '父辈在朝为官，你熟悉官场规则，可以利用家族关系在政治斗争中谋求地位。',\n  '寒门': '出身卑微，你必须从底层做起，每一步都需要付出更多努力，但也更能赢得民心。'\n};\n\nconst backgroundContext = backgroundElements[background] || backgroundElements['寒门'];\n\n// Build the system instructions\nconst systemInstructions = `你是一个宫廷斗争故事生成器。你需要根据玩家之前的所有选择，生成连贯的宫廷故事情节。\n\n重要：你必须严格根据玩家的性别和出身背景来生成故事。如果玩家是女性，故事必须以女性视角展开。出身背景决定了故事的起点和可选路径。\n\n重要规则：\n1. 故事必须基于玩家之前的所有选择，保持连贯性和因果关系\n2. 每次生成3-4个选择选项，每个选项都有不同的后果\n3. 年龄进展逻辑 - 时间跳跃必须符合现实：\n   - 婴儿（0-1岁）：时间跳跃为几周或几个月（例如：'三个月后'、'半年后'）\n   - 幼童（2-6岁）：时间跳跃为几个月到一年（例如：'半年后'、'一年后'）\n   - 少年（7-14岁）：时间跳跃为一到两年（例如：'一年后'、'两年后'）\n   - 青年（15-25岁）：时间跳跃为一到三年（例如：'两年后'、'三年后'）\n   - 中年（26-50岁）：时间跳跃为几年（例如：'三年后'、'五年后'）\n   - 老年（51+岁）：时间跳跃为几年（例如：'五年后'、'十年后'）\n   每次时间跳跃都应该适当推进角色年龄阶段\n4. 游戏结束条件 - 游戏应该在达到逻辑性故事结局时结束，而不是基于选择次数：\n   - 成为皇帝/皇后/摄政王，掌握最高权力\n   - 赢得宫廷权力斗争，成为幕后掌权者\n   - 毒杀皇帝并夺取皇位\n   - 消灭所有竞争对手，成为唯一继承人\n   - 成功逃离宫廷，获得自由\n   - 角色死亡（被毒杀、被处决、病死等）\n   - 其他戏剧性的故事结局\n   游戏应该持续到达到逻辑性叙事结论，无论选择次数多少\n5. 故事深度 - 必须包含伏笔和回调：\n   - 追踪并引用之前的所有选择，创建因果关系\n   - 早期埋下故事种子（如救过的角色、结下的仇敌、建立的联盟），在后期回报\n   - 例如：如果玩家在第2回合救了一个宫女，那个宫女应该在第7回合回来报恩，冒着生命危险帮助消灭竞争对手\n   - 每个选择都应该有意义的后果，在故事中产生连锁反应\n6. 故事要充满宫廷斗争元素：权谋、背叛、联盟、爱情、嫉妒等\n7. 每个选择都应该有明显的风险和收益\n8. 只有在故事达到逻辑结局时才设置 isGameEnding 为 true：\n   - 玩家成为最高统治者\n   - 玩家死亡\n   - 玩家获得终极权力\n   - 玩家逃离宫廷\n   - 其他戏剧性故事结局\n   不要基于选择次数来结束游戏\n\n【年龄与事件逻辑 - 严格验证】必须严格检查角色当前年龄阶段，确保事件符合该年龄的能力：\n\n婴儿期（0-1岁）：\n- 只能被动接受照顾\n- 不能说话、走路、做任何主动行为\n- 事件应围绕：被谁照顾、在哪里养育、周围人的态度\n- 选择应该是：由谁做出（父母、乳母等），而非婴儿自己\n- 禁止：读书、做女红、走路、说话、任何主动决策\n\n幼童期（2-6岁）：\n- 可以学习简单技能：识字、背诵、简单礼仪\n- 不能参与复杂权谋、不能独立行动\n- 事件应围绕：启蒙教育、玩耍、观察周围环境\n- 选择应该是：简单的学习选择、对人的好恶\n- 禁止：复杂的政治决策、独立外出、参与宫斗\n\n少年期（7-14岁）：\n- 开始有自主能力，可以学习更多技能\n- 可以观察和理解简单的权力关系\n- 可以建立初步的人际关系网络\n- 事件应围绕：深入学习、结交朋友、初步接触宫廷规则\n- 选择应该是：学习方向、交友选择、简单的站队\n- 可以参与：简单的权谋（如传递消息、观察情报）\n- 禁止：直接参与复杂宫斗、独立策划阴谋\n\n青年期（15-25岁）：\n- 完全有能力参与宫廷斗争\n- 可以选秀入宫、嫁娶、参与政治\n- 可以策划复杂的权谋计划\n- 事件应围绕：入宫、婚姻、权力斗争、建立势力\n- 选择应该是：全方位的战略决策\n\n中年期（26-50岁）：\n- 经验丰富，可能已经掌握一定权力\n- 可以是妃子、官员、幕后掌权者\n- 事件应围绕：巩固权力、培养下一代、应对新的挑战\n\n老年期（51+岁）：\n- 可能是太后、太妃、退休官员\n- 事件应围绕：权力交接、晚年生活、历史评价\n\n【NPC多样性与轮换系统】故事中必须有多个不同的NPC角色，实现动态的对手轮换：\n\n1. NPC生命周期管理：\n   - 每个NPC都有状态：活跃、失势、死亡、和解、离开\n   - 当NPC被解决后（死亡、失势、和解），标记其状态，不再作为主要对手出现\n   - 记录已解决的NPC列表，避免重复使用\n\n2. 不同阶段的NPC类型：\n   - 婴儿/幼童期：乳母、宫女、其他皇子公主、父母的妃嫔\n   - 少年期：教习嬷嬷、同龄皇子公主、宫中女官、太监\n   - 青年期（入宫前）：家族成员、地方官员、媒人、竞争对手\n   - 青年期（入宫后）：其他妃嫔、皇后、太后、皇帝、太监总管、前朝官员\n   - 中年期：新一代妃嫔、皇子、公主、朝臣、外戚\n   - 老年期：年轻皇帝、新皇后、权臣、外戚势力\n\n3. NPC轮换规则：\n   - 每个主要故事阶段（3-5个回合）应该有1-2个主要对手\n   - 当主要对手被解决后，引入新的对手\n   - 新对手应该与之前的对手有所不同：不同的身份、不同的动机、不同的手段\n   - 例如：少年期铲除嫉妒你的女官 → 青年期入宫遇到争宠的妃子 → 中年期对抗想要废后的官员 → 老年期与想要夺权的外戚斗争\n\n4. NPC关系网络：\n   - NPC之间应该有关系：盟友、敌人、家族关系\n   - 解决一个NPC可能影响其他NPC的态度\n   - 例如：杀死某个妃子，她的家族成员（朝中官员）可能成为新的敌人\n\n5. 避免单一敌人模式：\n   - 不要让同一个敌人从头追到尾（除非有特殊的故事原因）\n   - 每个阶段都应该有新的挑战和新的面孔\n   - 旧的NPC可以作为背景角色出现，但不应该是主要矛盾\n\n【灵活的死亡机制】游戏可以在任何年龄阶段结束，死亡是随时可能发生的：\n\n1. 早期死亡的合理性：\n   - 婴儿期：体弱多病、被下毒、被遗弃、意外事故\n   - 幼童期：误食毒物、卷入宫斗被误伤、疾病\n   - 少年期：天真相信错误的人、被陷害、卷入政治斗争\n   - 任何年龄都可能因为错误的选择而导致死亡\n\n2. 死亡的多样性：\n   - 直接死亡：被毒杀、被刺杀、被处决\n   - 间接死亡：被打入冷宫后病死、被流放途中死亡、自杀\n   - 意外死亡：疾病、意外事故、难产\n\n3. 死亡作为有效结局：\n   - 死亡不是失败，而是故事的一种结局\n   - 根据死亡方式和时机，给予不同的结局评价\n   - 例如：少年期因天真而死 → \"红颜薄命 - 过早凋零\"\n   - 例如：青年期在权力斗争中被毒杀 → \"宫斗牺牲品 - 权谋的代价\"\n\n4. 死亡的戏剧性：\n   - 死亡应该有铺垫和伏笔\n   - 死亡应该是某些选择的逻辑后果\n   - 死亡场景应该有情感冲击力\n\n【复杂故事弧线示例】故事应该有多个起伏和转折，跨越多个人生阶段：\n\n示例1 - 从底层到权力巅峰：\n- 婴儿期：出生在寒门，被送入宫中做宫女的女儿\n- 幼童期：在宫中长大，学习规矩，目睹宫斗的残酷\n- 少年期：成为小宫女，救了一位失势的妃子，结下善缘\n- 青年期：选秀入宫，利用之前救过的妃子（现已复宠）的帮助，获得皇帝注意\n- 青年期中期：与其他妃子争宠，利用智慧和手段逐步上位\n- 中年期：成为皇贵妃，儿子被立为太子，但遭到皇后和外戚的联合打压\n- 中年期后期：策划铲除皇后，但被发现破绽，面临生死抉择\n- 结局分支：成功成为皇后 / 被打入冷宫 / 毒杀皇帝自己称帝 / 带着儿子逃离宫廷\n\n示例2 - 权力的代价：\n- 婴儿期：出生在帝王之家，是皇帝最宠爱的公主\n- 幼童期：被娇生惯养，但目睹母妃在宫斗中失势\n- 少年期：为了保护母妃，开始学习权谋，借助外戚力量铲除敌对妃嫔\n- 青年期：被迫和亲到敌国，在异国他乡艰难生存\n- 青年期中期：在敌国宫廷中站稳脚跟，成为王后，但思念故国\n- 中年期：故国与敌国开战，面临忠诚与亲情的抉择\n- 中年期后期：策划让儿子继承两国王位，统一两国\n- 结局分支：成功统一两国成为太后 / 在战争中丧生 / 选择一方背叛另一方 / 出家为尼逃避选择\n\n示例3 - 悲剧的螺旋：\n- 婴儿期：出生在官员之家，父亲是朝中重臣\n- 幼童期：聪慧过人，深得父亲喜爱，但遭到继母嫉妒\n- 少年期：继母设计陷害，导致父亲对她产生误会，被送入宫中为奴\n- 青年期：在宫中忍辱负重，暗中积蓄力量，结识了一位太监盟友\n- 青年期中期：利用太监的帮助，成功陷害继母，为自己报仇\n- 中年期：但报仇导致父亲家族被牵连，父亲在狱中自杀，她陷入深深的自责\n- 中年期后期：心灰意冷，选择出家为尼 / 继续在宫中沉沦 / 自杀追随父亲\n- 结局：悲剧结局 - \"复仇的代价 - 失去所爱\"\n\n${genderPaths}\n\n出身背景影响：\n${backgroundContext}\n\nNPC性格系统：\n- 每个重要NPC都有独特的性格特征，这些特征会影响他们对玩家行为的反应\n- 当新的重要NPC首次出现时，必须为其生成性格特征并存储在npcPersonalities对象中\n- NPC性格特征包括：\n  * trustLevel (信任度: 1-10，数字越高越容易信任他人)\n  * suspicionLevel (多疑程度: 1-10，数字越高越多疑)\n  * ambitionLevel (野心: 1-10，数字越高野心越大)\n  * temperament (性格: 温和/暴躁/冷静/阴险)\n  * loyaltyTendency (忠诚倾向: 1-10，数字越高越重视忠诚)\n  * status (状态: 活跃/失势/死亡/和解/离开)\n- 例如：一个信任度高的皇帝会相信示弱的表现，而多疑的皇帝会认为示弱是操纵手段\n- NPC的性格特征在整个游戏过程中保持一致，但他们对玩家的态度会根据玩家的选择而改变\n- 同一个NPC在不同的游戏周目中应该有不同的性格特征，这样每次游戏体验都会不同\n- 故事必须根据NPC的性格特征来设计他们的反应和行为，确保逻辑一致性\n- 每次生成故事时，检查npcPersonalities对象，如果某个重要NPC还没有性格特征，就为其生成\n- 当NPC被解决后（死亡、失势等），更新其status字段，不再让其作为主要对手出现\n\n重要：由于NPC性格的随机性和轮换机制，每次游戏的故事发展都应该有所不同，即使玩家做出相同的选择。这确保了游戏的可重玩性和新鲜感。\n\n你必须返回严格的JSON格式，包含以下字段：\n{\n  \"currentSituation\": \"当前情境的详细描述（200-300字）\",\n  \"options\": [\n    {\n      \"id\": \"option1\",\n      \"text\": \"选项文本\",\n      \"consequence\": \"选择此项可能的后果提示\"\n    },\n    {\n      \"id\": \"option2\",\n      \"text\": \"选项文本\",\n      \"consequence\": \"选择此项可能的后果提示\"\n    },\n    {\n      \"id\": \"option3\",\n      \"text\": \"选项文本\",\n      \"consequence\": \"选择此项可能的后果提示\"\n    }\n  ],\n  \"timeJump\": \"时间跳跃描述（例如：'一周后'、'两个月后'）\",\n  \"newTimePeriod\": \"新的时期描述\",\n  \"newAge\": \"角色新的年龄阶段（婴儿/幼童/少年/青年/中年/老年）\",\n  \"isGameEnding\": false,\n  \"npcPersonalities\": {\n    \"NPC名字\": {\n      \"trustLevel\": 5,\n      \"suspicionLevel\": 7,\n      \"ambitionLevel\": 8,\n      \"temperament\": \"冷静\",\n      \"loyaltyTendency\": 6,\n      \"status\": \"活跃\"\n    }\n  }\n}\n\n只返回JSON，不要有任何其他文字。`;\n\n// Build the user prompt with current game state\nconst userPrompt = `【关键信息】玩家性别：${gender}，出身背景：${background}。请务必基于这些信息生成故事，不要忽略这些设定。\n\n当前游戏状态：\n- 玩家姓名：${playerName}\n- 性别：${gender}\n- 出身背景：${background}\n- 故事进度：第${storyProgress + 1}回合\n- 当前年龄阶段：${currentAge}\n- 当前时期：${timePeriod}\n${previousChoicesContext}\n\n当前NPC性格特征：\n${Object.keys(npcPersonalities).length > 0 ? JSON.stringify(npcPersonalities, null, 2) : '暂无NPC性格数据（如果故事中出现新的重要NPC，请为其生成性格特征）'}\n\n请基于以上所有信息，生成下一个故事情节和选择。记住要保持故事的连贯性，让每个选择都对后续剧情产生影响。追踪之前的选择，创建因果关系，埋下伏笔并在后续回收。根据玩家的性别和出身背景设计合适的故事路线。确保NPC的行为符合他们的性格特征。只有在达到逻辑性故事结局时才结束游戏。\n\n【重要提醒】：\n1. 严格检查当前年龄阶段（${currentAge}），确保事件和选择符合该年龄的能力\n2. 检查已有的NPC列表，如果有NPC状态为\"死亡\"或\"失势\"，不要让他们继续作为主要对手\n3. 如果当前阶段的主要对手已经被解决，引入新的NPC作为对手\n4. 确保新NPC与之前的NPC有所不同（不同身份、动机、手段）\n5. 如果玩家做出了高风险的选择，不要害怕让角色死亡，死亡是有效的故事结局\n6. 创造有起伏的故事弧线，不要让故事过于平淡或重复`;\n\n// Return the prompt structure with all game state fields\nreturn {\n  json: {\n    systemInstructions: systemInstructions,\n    userPrompt: userPrompt,\n    sessionId: sessionId,\n    playerName: playerName,\n    gender: gender,\n    background: background,\n    choiceHistory: choiceHistory,\n    storyProgress: storyProgress,\n    currentAge: currentAge,\n    timePeriod: timePeriod,\n    gameEnded: gameEnded,\n    npcPersonalities: npcPersonalities,\n    gameState: {\n      playerName: playerName,\n      gender: gender,\n      background: background,\n      storyProgress: storyProgress,\n      currentAge: currentAge,\n      timePeriod: timePeriod,\n      choiceHistoryLength: choiceHistory.length,\n      npcCount: Object.keys(npcPersonalities).length\n    }\n  }\n};"
+      },
+      "id": "1b83a89b-3465-4974-b09d-9b3429409eb8",
+      "name": "Generate Story Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse the DeepSeek API response and merge with game state\nconst input = $input.first().json;\n\n// Parse the API response\nlet storyData;\ntry {\n  // The response might be in different formats depending on the API call\n  const response = input.response || input;\n  \n  // If response is a string, parse it as JSON\n  if (typeof response === 'string') {\n    storyData = JSON.parse(response);\n  } else {\n    storyData = response;\n  }\n} catch (error) {\n  // If parsing fails, return an error state\n  return [{\n    json: {\n      error: true,\n      message: 'Failed to parse API response',\n      rawResponse: input.response\n    }\n  }];\n}\n\n// Extract story elements from the parsed response\nconst currentSituation = storyData.currentSituation || storyData.situation || '';\nconst options = storyData.options || [];\nconst timeJump = storyData.timeJump || '';\nconst newTimePeriod = storyData.newTimePeriod || storyData.timePeriod || input.timePeriod || '出生';\nconst newAge = storyData.newAge || storyData.age || input.currentAge || '婴儿';\nconst isGameEnding = storyData.isGameEnding || storyData.gameEnding || false;\nconst npcPersonalities = storyData.npcPersonalities || [];\n\n// Extract game state fields from input (coming from Call DeepSeek API node)\nconst gameState = {\n  sessionId: input.sessionId,\n  playerName: input.playerName,\n  choiceHistory: input.choiceHistory || [],\n  storyProgress: input.storyProgress || 0,\n  gameEnded: input.gameEnded || false,\n  currentAge: input.currentAge || '婴儿',\n  timePeriod: input.timePeriod || '出生',\n  gender: input.gender || '',\n  background: input.background || ''\n};\n\n// Return combined object with all fields needed for the form\nreturn [{\n  json: {\n    ...gameState,\n    currentSituation: currentSituation,\n    options: options,\n    timeJump: timeJump,\n    newTimePeriod: newTimePeriod,\n    newAge: newAge,\n    isGameEnding: isGameEnding,\n    npcPersonalities: npcPersonalities\n  }\n}];"
+      },
+      "id": "55388279-4a81-4252-a684-be9ffb97b17e",
+      "name": "Parse Story Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "defineForm": "json",
+        "jsonOutput": "=[\n  {\n    \"fieldLabel\": \"你的选择\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": {{ $json.options.map(opt => ({ option: opt.text })) }}\n    },\n    \"requiredField\": true\n  }\n]",
+        "options": {
+          "formTitle": "={{ $json.timeJump + ' - ' + $json.newTimePeriod }}",
+          "formDescription": "={{ $json.currentSituation }}",
+          "buttonLabel": "确认选择"
+        }
+      },
+      "id": "f7d98729-37e5-4917-836b-e4db284eaa04",
+      "name": "Story Choice Form",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        1232,
+        0
+      ],
+      "webhookId": "47943eb2-0576-407e-9b85-cdfc213b8661"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "choiceHistory",
+              "value": "={{ $('Parse Story Response').first().json.choiceHistory.concat([{ situation: $('Parse Story Response').first().json.currentSituation, chosen: $json['你的选择'], timestamp: $now.toISO() }]) }}",
+              "type": "array"
+            },
+            {
+              "id": "id-2",
+              "name": "storyProgress",
+              "value": "={{ ($('Parse Story Response').first().json.storyProgress ?? 0) + 1 }}",
+              "type": "number"
+            },
+            {
+              "id": "id-3",
+              "name": "currentAge",
+              "value": "={{ $('Parse Story Response').first().json.newAge }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "timePeriod",
+              "value": "={{ $('Parse Story Response').first().json.newTimePeriod }}",
+              "type": "string"
+            },
+            {
+              "id": "id-5",
+              "name": "gameEnded",
+              "value": "={{ $('Parse Story Response').first().json.isGameEnding }}",
+              "type": "boolean"
+            },
+            {
+              "id": "id-6",
+              "name": "sessionId",
+              "value": "={{ $('Parse Story Response').first().json.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "id-7",
+              "name": "playerName",
+              "value": "={{ $('Parse Story Response').first().json.playerName }}",
+              "type": "string"
+            },
+            {
+              "id": "id-8",
+              "name": "gender",
+              "value": "={{ $('Parse Story Response').first().json.gender }}",
+              "type": "string"
+            },
+            {
+              "id": "id-9",
+              "name": "background",
+              "value": "={{ $('Parse Story Response').first().json.background }}",
+              "type": "string"
+            },
+            {
+              "id": "id-10",
+              "name": "npcPersonalities",
+              "value": "={{ JSON.stringify($('Parse Story Response').first().json.npcPersonalities) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "1f0f36e4-9c87-4719-91cc-d8dc4a6aed0b",
+      "name": "Update Game State",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1456,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ Boolean($json.gameEnded) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "33f1b552-1c1a-42cc-aa5a-f06d88a81e13",
+      "name": "Check Game End",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1904,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate achievements based on actual story events from choiceHistory\nconst gameState = $input.first().json;\n\n// Parse choiceHistory if it's a string\nlet choiceHistory = gameState.choiceHistory || [];\nif (typeof choiceHistory === 'string') {\n  try {\n    choiceHistory = JSON.parse(choiceHistory);\n  } catch (error) {\n    choiceHistory = [];\n  }\n}\n\nconst totalChoices = choiceHistory.length;\n\n// Analyze story patterns from choice history\nconst storyAnalysis = {\n  savedCharacters: 0,\n  eliminatedRivals: 0,\n  alliances: 0,\n  betrayals: 0,\n  romanticChoices: 0,\n  powerMoves: 0,\n  survivalSituations: 0,\n  kindActions: 0,\n  ruthlessActions: 0,\n  diplomaticActions: 0,\n  aggressiveActions: 0\n};\n\n// Keywords for pattern detection\nconst patterns = {\n  save: ['救', '帮助', '保护', '援助', '搭救', '解救'],\n  eliminate: ['除掉', '杀', '毒', '陷害', '铲除', '暗杀', '处决'],\n  alliance: ['联盟', '结盟', '合作', '联手', '拉拢', '结交'],\n  betrayal: ['背叛', '出卖', '反水', '告密', '陷害'],\n  romance: ['爱', '情', '恋', '喜欢', '倾心', '钟情', '私会'],\n  power: ['权', '势', '掌控', '控制', '夺权', '篡位', '登基'],\n  survival: ['逃', '躲', '避', '隐忍', '忍耐', '求生'],\n  kind: ['仁慈', '宽恕', '善良', '慈悲', '怜悯', '温柔'],\n  ruthless: ['冷酷', '无情', '狠辣', '残忍', '果断'],\n  diplomatic: ['外交', '谈判', '斡旋', '调解', '和解', '妥协'],\n  aggressive: ['进攻', '强硬', '激进', '主动出击', '先发制人']\n};\n\n// Analyze each choice\nchoiceHistory.forEach(choice => {\n  const situation = (choice.situation || '').toLowerCase();\n  const chosen = (choice.chosen || '').toLowerCase();\n  const combined = situation + ' ' + chosen;\n  \n  // Check for patterns\n  if (patterns.save.some(keyword => combined.includes(keyword))) storyAnalysis.savedCharacters++;\n  if (patterns.eliminate.some(keyword => combined.includes(keyword))) storyAnalysis.eliminatedRivals++;\n  if (patterns.alliance.some(keyword => combined.includes(keyword))) storyAnalysis.alliances++;\n  if (patterns.betrayal.some(keyword => combined.includes(keyword))) storyAnalysis.betrayals++;\n  if (patterns.romance.some(keyword => combined.includes(keyword))) storyAnalysis.romanticChoices++;\n  if (patterns.power.some(keyword => combined.includes(keyword))) storyAnalysis.powerMoves++;\n  if (patterns.survival.some(keyword => combined.includes(keyword))) storyAnalysis.survivalSituations++;\n  if (patterns.kind.some(keyword => combined.includes(keyword))) storyAnalysis.kindActions++;\n  if (patterns.ruthless.some(keyword => combined.includes(keyword))) storyAnalysis.ruthlessActions++;\n  if (patterns.diplomatic.some(keyword => combined.includes(keyword))) storyAnalysis.diplomaticActions++;\n  if (patterns.aggressive.some(keyword => combined.includes(keyword))) storyAnalysis.aggressiveActions++;\n});\n\n// Define story-based achievements\nconst allAchievements = [\n  {\n    id: 'savior',\n    title: '救命恩人',\n    description: '在危急时刻拯救了他人的性命',\n    icon: '🙏',\n    condition: () => storyAnalysis.savedCharacters >= 2\n  },\n  {\n    id: 'ruthless',\n    title: '冷血无情',\n    description: '毫不留情地铲除了多个对手',\n    icon: '❄️',\n    condition: () => storyAnalysis.eliminatedRivals >= 3\n  },\n  {\n    id: 'strategist',\n    title: '权谋高手',\n    description: '建立了多个战略联盟',\n    icon: '🎯',\n    condition: () => storyAnalysis.alliances >= 2\n  },\n  {\n    id: 'romantic',\n    title: '爱恨情仇',\n    description: '在宫廷中经历了刻骨铭心的情感纠葛',\n    icon: '💕',\n    condition: () => storyAnalysis.romanticChoices >= 2\n  },\n  {\n    id: 'betrayer',\n    title: '背信弃义',\n    description: '为了权力不惜背叛盟友',\n    icon: '🗡️',\n    condition: () => storyAnalysis.betrayals >= 2\n  },\n  {\n    id: 'power_hungry',\n    title: '权力至上',\n    description: '始终将权力放在首位',\n    icon: '👑',\n    condition: () => storyAnalysis.powerMoves >= 3\n  },\n  {\n    id: 'survivor',\n    title: '生存大师',\n    description: '在危机四伏的宫廷中巧妙生存',\n    icon: '🛡️',\n    condition: () => storyAnalysis.survivalSituations >= 3\n  },\n  {\n    id: 'benevolent',\n    title: '仁慈之心',\n    description: '在残酷的宫廷中保持善良',\n    icon: '✨',\n    condition: () => storyAnalysis.kindActions >= 3\n  },\n  {\n    id: 'iron_fist',\n    title: '铁腕统治',\n    description: '以强硬手段掌控局势',\n    icon: '⚔️',\n    condition: () => storyAnalysis.ruthlessActions >= 3\n  },\n  {\n    id: 'diplomat',\n    title: '外交大师',\n    description: '善于通过谈判化解危机',\n    icon: '🕊️',\n    condition: () => storyAnalysis.diplomaticActions >= 2\n  },\n  {\n    id: 'first_step',\n    title: '初入宫廷',\n    description: '踏入宫廷的第一步',\n    icon: '🎭',\n    condition: () => totalChoices >= 1\n  },\n  {\n    id: 'veteran',\n    title: '宫廷老手',\n    description: '在宫廷中经历了完整的人生',\n    icon: '🏛️',\n    condition: () => totalChoices >= 12\n  }\n];\n\n// Check which achievements were earned\nconst earnedAchievements = allAchievements.filter(achievement => \n  achievement.condition()\n);\n\n// Determine ending type based on story analysis and final state\nlet endingType = '普通结局';\nconst lastChoice = choiceHistory[choiceHistory.length - 1] || {};\nconst finalSituation = ((lastChoice.situation || '') + ' ' + (lastChoice.chosen || '')).toLowerCase();\n\n// Check for specific ending patterns\nif (finalSituation.includes('皇帝') || finalSituation.includes('登基') || finalSituation.includes('称帝')) {\n  endingType = '👑 九五之尊 - 登基为帝';\n} else if (finalSituation.includes('皇后') || finalSituation.includes('后位')) {\n  endingType = '👸 母仪天下 - 成为皇后';\n} else if (finalSituation.includes('摄政') || finalSituation.includes('掌权')) {\n  endingType = '⚜️ 权倾朝野 - 摄政掌权';\n} else if (finalSituation.includes('死') || finalSituation.includes('亡') || finalSituation.includes('毒')) {\n  endingType = '💀 香消玉殒 - 命丧宫廷';\n} else if (finalSituation.includes('逃') || finalSituation.includes('离开') || finalSituation.includes('私奔')) {\n  endingType = '🌅 远走高飞 - 逃离宫廷';\n} else if (storyAnalysis.powerMoves >= 4) {\n  endingType = '🎯 权谋大师 - 掌控局势';\n} else if (storyAnalysis.eliminatedRivals >= 4) {\n  endingType = '⚔️ 铁血手腕 - 铲除异己';\n} else if (storyAnalysis.alliances >= 3) {\n  endingType = '🤝 纵横捭阖 - 联盟制胜';\n} else if (storyAnalysis.romanticChoices >= 3) {\n  endingType = '💕 情定三生 - 爱情至上';\n} else if (storyAnalysis.kindActions >= 4) {\n  endingType = '✨ 仁德之名 - 以德服人';\n} else if (totalChoices >= 10) {\n  endingType = '🏛️ 宫廷传奇 - 留名青史';\n} else if (totalChoices >= 5) {\n  endingType = '🌸 安然度日 - 平稳生存';\n} else {\n  endingType = '⭐ 初窥门径 - 初入宫廷';\n}\n\n// Return the result\nreturn {\n  json: {\n    endingType: endingType,\n    totalChoices: totalChoices,\n    achievements: earnedAchievements,\n    playerName: gameState.playerName || '玩家',\n    finalAge: gameState.currentAge || '未知',\n    finalPeriod: gameState.timePeriod || '未知',\n    storyAnalysis: storyAnalysis\n  }\n};"
+      },
+      "id": "1c061e73-0131-4203-b582-fdaf874daca2",
+      "name": "Generate Achievements",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2128,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldType": "html",
+              "html": "={{ '# 游戏结束\\n\\n## ' + $json.endingType + '\\n\\n你在这一周目中做出了 **' + $json.totalChoices + '** 个选择。\\n\\n### 🏆 获得成就\\n\\n' + $json.achievements.map(a => a.icon + ' **' + a.title + '**: ' + a.description).join('\\n\\n') + '\\n\\n---' }}"
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "游戏结束",
+          "formDescription": "",
+          "buttonLabel": "开始新的一周目"
+        }
+      },
+      "id": "b9449716-ff7b-474f-aec2-83d417967404",
+      "name": "Game End Screen",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        2352,
+        80
+      ],
+      "webhookId": "0c17f7d5-512f-40c1-a57a-6b1cf8e1e9d3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AKf25SheQQH4ASxQ",
+          "mode": "list",
+          "cachedResultName": "palace_game_sessions",
+          "cachedResultUrl": "/projects/znm1hvFsbhET4byn/datatables/AKf25SheQQH4ASxQ"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "sessionId",
+              "keyValue": "={{ $json.sessionId }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "sessionId": "={{ $json.sessionId }}",
+            "playerName": "={{ $json.playerName }}",
+            "choiceHistory": "={{ JSON.stringify($json.choiceHistory) }}",
+            "storyProgress": "={{ $json.storyProgress }}",
+            "gameEnded": "={{ $json.gameEnded }}",
+            "currentAge": "={{ $json.currentAge }}",
+            "timePeriod": "={{ $json.timePeriod }}",
+            "gender": "={{ $json.gender }}",
+            "background": "={{ $json.background }}",
+            "npcPersonalities": "={{ JSON.stringify($json.npcPersonalities) }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "sessionId",
+              "displayName": "sessionId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "playerName",
+              "displayName": "playerName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "choiceHistory",
+              "displayName": "choiceHistory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "storyProgress",
+              "displayName": "storyProgress",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "gameEnded",
+              "displayName": "gameEnded",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "currentAge",
+              "displayName": "currentAge",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "timePeriod",
+              "displayName": "timePeriod",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "background",
+              "displayName": "background",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "npcPersonalities",
+              "displayName": "npcPersonalities",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "412c4ad3-7e60-4cb6-9134-74436b49038e",
+      "name": "Update Game State in DB",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.deepseek.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer sk-c91df92449b049cebf17f306202c774c"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"deepseek-chat\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": {{ JSON.stringify($json.systemInstructions) }}\n    },\n    {\n      \"role\": \"user\",\n      \"content\": {{ JSON.stringify($json.userPrompt) }}\n    }\n  ],\n  \"temperature\": 0.8,\n  \"response_format\": {\n    \"type\": \"json_object\"\n  }\n}",
+        "options": {}
+      },
+      "id": "44eeecfb-6523-408a-9e8c-d0e0ee013059",
+      "name": "Call DeepSeek API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        560,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ke8oqk5KnDEoymFw",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge API Response with Game State\nconst apiResponse = $input.first().json;\nconst gameStateNode = $('Generate Story Prompt').first().json;\n\n// Extract the content from the API response\nlet storyData;\ntry {\n  // Get the content from choices[0].message.content\n  const content = apiResponse.choices[0].message.content;\n  \n  // Parse the content as JSON\n  storyData = JSON.parse(content);\n} catch (error) {\n  // If parsing fails, return an error state\n  return [{\n    json: {\n      error: true,\n      message: 'Failed to parse API response',\n      rawResponse: apiResponse\n    }\n  }];\n}\n\n// Parse npcPersonalities from gameStateNode if it's a string\nlet npcPersonalities = gameStateNode.npcPersonalities || [];\nif (typeof npcPersonalities === 'string') {\n  try {\n    npcPersonalities = JSON.parse(npcPersonalities);\n  } catch (error) {\n    npcPersonalities = [];\n  }\n}\n\n// Extract game state fields from Generate Story Prompt node\nconst gameState = {\n  sessionId: gameStateNode.sessionId,\n  playerName: gameStateNode.playerName,\n  choiceHistory: gameStateNode.choiceHistory || [],\n  storyProgress: gameStateNode.storyProgress || 0,\n  currentAge: gameStateNode.currentAge || '婴儿',\n  timePeriod: gameStateNode.timePeriod || '出生',\n  gameEnded: gameStateNode.gameEnded || false,\n  gender: gameStateNode.gender || '',\n  background: gameStateNode.background || '',\n  npcPersonalities: npcPersonalities\n};\n\n// Extract story elements from the parsed response\nconst currentSituation = storyData.currentSituation || '';\nconst options = storyData.options || [];\nconst timeJump = storyData.timeJump || '';\nconst newTimePeriod = storyData.newTimePeriod || gameState.timePeriod;\nconst newAge = storyData.newAge || gameState.currentAge;\nconst isGameEnding = storyData.isGameEnding || false;\nconst npcPersonalitiesFromResponse = storyData.npcPersonalities || gameState.npcPersonalities;\n\n// Return merged object with all fields\nreturn [{\n  json: {\n    ...gameState,\n    currentSituation: currentSituation,\n    options: options,\n    timeJump: timeJump,\n    newTimePeriod: newTimePeriod,\n    newAge: newAge,\n    isGameEnding: isGameEnding,\n    npcPersonalities: npcPersonalitiesFromResponse\n  }\n}];"
+      },
+      "id": "813aa8c3-9f36-4240-824f-fbb686d65bdd",
+      "name": "Merge API Response with Game State",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Game Start": {
+      "main": [
+        [
+          {
+            "node": "Initialize Game State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Initialize Game State": {
+      "main": [
+        [
+          {
+            "node": "Save Game State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Game State": {
+      "main": [
+        [
+          {
+            "node": "Load Game State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Game State": {
+      "main": [
+        [
+          {
+            "node": "Prepare Story Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Story Context": {
+      "main": [
+        [
+          {
+            "node": "Generate Story Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Story Prompt": {
+      "main": [
+        [
+          {
+            "node": "Call DeepSeek API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Story Response": {
+      "main": [
+        [
+          {
+            "node": "Story Choice Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Story Choice Form": {
+      "main": [
+        [
+          {
+            "node": "Update Game State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Game State": {
+      "main": [
+        [
+          {
+            "node": "Update Game State in DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Game End": {
+      "main": [
+        [
+          {
+            "node": "Generate Achievements",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Load Game State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Achievements": {
+      "main": [
+        [
+          {
+            "node": "Game End Screen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Game State in DB": {
+      "main": [
+        [
+          {
+            "node": "Check Game End",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call DeepSeek API": {
+      "main": [
+        [
+          {
+            "node": "Merge API Response with Game State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge API Response with Game State": {
+      "main": [
+        [
+          {
+            "node": "Parse Story Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b25e9833-a284-4ac1-86fe-c87f93797165",
+  "meta": {
+    "instanceId": "ebdd3b25c25df48b88a8258324b71b76e5fceb27a41e4284c4a673cf6fbeed02"
+  },
+  "id": "XW8HwbQydcONAETy",
+  "tags": []
+}
