@@ -1,7 +1,7 @@
-# 宫廷文字游戏 🏯
+# 交互式宫廷文字游戏 🏯
   
 ## 项目简介
-基于 n8n 工作流和 DeepSeek AI 开发的交互式宫斗文字游戏，玩家通过选择决定剧情走向。
+基于 n8n 工作流和 DeepSeek AI 开发的交互式宫廷文字游戏，玩家通过选择决定剧情走向。
 支持自选性别和出身，npc性格富于变化，在DeepSeek的支持下，有多分支剧情，为每一次游戏带来不一样的体验。
 
 ## 功能特色
@@ -23,7 +23,7 @@
 4. 配置 DeepSeek API 凭据
    在Credentials中创建Header Auth以及DeepSeek
 5. 在palace_game_workflow--Call DeepSeek API节点中的Header Parameters--value自行输入API
-6. 创建数据表 `palace_game_sessions`
+6. 创建数据表（data table） `palace_game_sessions`
    add column：sessionId         string
                playerName        string
                choiceHistory     string
@@ -42,6 +42,15 @@ deepseek-palace-game/
 ├── palace_game_workflow.json  # 主工作流文件
 
 └── README.md                  # 项目说明文档
+
+└── Game over interface.png    # 游戏截图
+
+└── Game star interface.png    # 游戏截图
+
+└── story-scene-1.png          # 游戏截图
+
+└── story-scene-2.png          # 游戏截图
+
 ## 使用说明
 1. 访问部署后的 Webhook URL
 2. 开始游戏，做出选择推动剧情
